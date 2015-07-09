@@ -7,6 +7,7 @@ var Artist = require('./api/models/Artist');
 mongoose.connect('mongodb://localhost/talentmine');
 
 var app = express();
+app.use(express.static(__dirname+'/public'));
 app.use(bodyParser.json());
 
 app.get('/api/tracks', function(req, res) {
@@ -60,7 +61,9 @@ app.post('/api/tracks/:track_id/artists/:artist_id', function(req, res) {
 });
 
 app.get('/api/artists', function(req, res) {
-	return res.json([]);
+	Artist.find({}).exec().then(function(artists) {
+		return res.json(artists);
+	});
 });
 
 app.post('/api/artists', function(req, res) {
